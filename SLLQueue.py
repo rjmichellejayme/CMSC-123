@@ -1,118 +1,72 @@
-# Jhoanna R. Olana - CMSC123 Lab3
 class SLLNode:
-	# Insert the 'SLLNode' class you created in Lab2, since they should be the same
-	def __init__(self, value):
-		self.setValue(value)
-		self.nextNode = None
+    def __init__(self, value):
+        self.value = value  # Initialize the node with a value.
+        self.nextNode = None  # Initialize the next node reference as None.
 
-	def setValue(self, value):
-		self.value = value
+    def setValue(self, value):
+        self.value = value  # Set the value of the node.
 
-	def getValue(self):
-		return self.value
+    def getValue(self):
+        return self.value  # Get the value of the node.
 
-	def setNext(self, nextNode):
-		self.nextNode = nextNode 
+    def setNext(self, nextNode):
+        self.nextNode = nextNode  # Set the reference to the next node.
 
-	def getNext(self):
-		return self.nextNode
+    def getNext(self):
+        return self.nextNode  # Get the reference to the next node.
 
 class SLL:
-	# Insert the 'SLL' class you created in Lab2, since they should be the same
-	def __init__(self):
-		self.size = 0
-		self.frontNode = SLLNode(None)
-		self.frontNode.setNext(SLLNode(None))
+    def __init__(self):
+        # Initialize an empty list with a size of 0 and no top node.
+        self.size = 0
+        self.frontNode = SLLNode(None)  # Initialize the front node with None value.
+        self.frontNode.setNext(SLLNode(None))  # Initialize the next node reference as None.
 
-	def getSize(self):
-		# returns the size of the queue
-		return self.size
+    def getSize(self):
+        return self.size  # Get the current size of the list.
 
-	def isEmpty(self):
-		# The isEmpty() operation returns true if the queue is empty and false if the queue is not empty
-		return (self.size == 0)
+    def isEmpty(self):
+        # Check if the list is empty.
+        return self.size == 0
+
+    def showList(self):
+        curr = self.topNode
+        while curr:
+            print(curr.getValue())
+            curr = curr.getNext()
 
 class SLLQueue(SLL):
-	# Note that class "SLLQueue" inherits the class "SLL" attributes and methods
+    
+    def front(self):
+        if self.isEmpty():
+            return SLLNode(None)  # Return an empty node if the queue is empty.
+        else:
+            return self.frontNode  # Return the front node of the queue.
+            
+    def enqueue(self, value):
+        new_node = SLLNode(value)  # Create a new node with the given value.
+        current_node = self.frontNode
 
-	def front(self):
-		# The front() operation returns a reference value to the front element of the queue, but doesn’t remove it
-		return self.frontNode
+        if self.isEmpty():
+            self.frontNode = new_node  # If the queue is empty, set the new node as the front node.
+        else:
+            while current_node.getNext() is not None:
+                current_node = current_node.getNext()  # Traverse to the end of the queue.
+            current_node.setNext(new_node)  # Set the new node as the next node of the last node.
+    
+        self.size += 1  # Increase the size of the queue.
 
-	def enqueue(self, value):
-		# The enqueue() operation inserts an element at the end of the queue
-		# [Ignore: linked list does not have a fixed size] If the capacity is full, you are not allowed to enqueue() an element to the queue
-		new_node = SLLNode(value)
-		
-		# Case 1: Empty Queue
-		if (self.isEmpty()):
-			self.frontNode = new_node
-		# Case 2: Non-empty queue
-		# Enqueue adds a node to a tail
-		# No reference to tailNode
-		# --> iterate through all nodes until current node's next is None (tail's next is None)
-		else:
-			curr = self.frontNode
-			while (curr.getNext() != None):
-				curr = curr.getNext()
-			curr.setNext(new_node)
+    def dequeue(self):
+        removed_element = self.frontNode  # Get the front node as the element to be removed.
 
-		self.size += 1
-			
-	def dequeue(self):
-		# The dequeue() operation removes the element at the front of the queue
-		# This should also return the 'Element' that was removed
+        if self.isEmpty():
+            raise Exception("dequeue() still working even if the array is empty")  # Raise an exception if the queue is empty.
+        else:
+            if self.frontNode.getNext is None:
+                self.frontNode = SLLNode(None)  # If there's only one element, set the front node as an empty node.
+            else:
+                self.frontNode = self.frontNode.getNext()  # Move the front node to the next node.
+                removed_element.setNext(None)  # Remove the reference to the next node from the removed element.
+            self.size -= 1  # Decrease the size of the queue.
+            return removed_element  # Return the removed element.
 
-		# to_remove = self.frontNode
-		# --> won't work
-		# --> to_remove points to front
-		# --> any modification to front will be reflected to to_remove
-		# to_remove = SLLNode(self.frontNode.getValue())
-		# other method (corresponding line in self.size == 1):
-		to_remove = self.frontNode
-
-		if (self.isEmpty()):
-			raise Exception("Error: Empty queue")
-		elif (self.size == 1):
-			# self.frontNode.setValue(None)
-			self.frontNode = SLLNode(None)
-		else:
-			self.frontNode = self.frontNode.getNext()
-		
-		# print(f"top {self.frontNode.getValue()}\tremoved {to_remove.getValue()}")
-		self.size -= 1
-		return to_remove
-
-	# for debug
-	def display(self):
-		print(f"front: {self.front().getValue()}")
-		curr = self.front()
-		while (curr != None):
-			print(curr.getValue())
-			curr = curr.getNext()
-
-def main():
-	mySLL = SLLQueue()
-
-	# Class instance with None parameters != NoneType Object
-	# test_node = SLLNode(None)
-	# print(test_node != None)
-
-	for i in range(0, 3):
-		mySLL.enqueue(i)
-	mySLL.display()
-
-	for i in range(0, 3):
-		mySLL.dequeue()
-	mySLL.display()
-
-	# mySLL.enqueue(1)
-	# mySLL.display()
-	# mySLL.dequeue()
-	# mySLL.display()
-
-	# mySLL.dequeue()
-	# mySLL.display()
-
-if __name__=="__main__":
-	main()

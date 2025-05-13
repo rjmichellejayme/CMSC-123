@@ -25,6 +25,12 @@ class SLL:
         # Check if the list is empty.
         return self.size == 0
 
+    def showList(self):
+        curr = self.topNode
+        while curr:
+            print(curr.getValue())
+            curr = curr.getNext()
+
 
 class SLLStack(SLL):
     def top(self):
